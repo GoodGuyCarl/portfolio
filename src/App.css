@@ -1,0 +1,9 @@
+body {
+  max-width: 750px;
+	margin: 0 auto;
+  background: #232123;
+}
+
+.pointer {
+  cursor: pointer;
+}
