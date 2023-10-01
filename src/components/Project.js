@@ -1,5 +1,4 @@
 import React from "react";
-import hrmoms from "../assets/hrmoms-sample-pic.png";
 
 const Project = ({ title, description, image, link, complete }) => {
 	return (
@@ -23,6 +22,7 @@ const Project = ({ title, description, image, link, complete }) => {
 						href={link}
 						className="text-white underline font-poppins align-bottom text-lg mt-auto"
 						target="_blank"
+						rel="noreferrer"
 					>
 						View project &gt;
 					</a>
