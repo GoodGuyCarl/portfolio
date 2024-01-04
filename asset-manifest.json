@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/portfolio/static/css/main.f3214523.css",
+    "main.js": "/portfolio/static/js/main.e6e851da.js",
+    "static/js/787.1ed0c42c.chunk.js": "/portfolio/static/js/787.1ed0c42c.chunk.js",
+    "static/media/hrmoms-sample-pic.png": "/portfolio/static/media/hrmoms-sample-pic.dea9b30fb04468c106b5.png",
+    "index.html": "/portfolio/index.html",
+    "main.f3214523.css.map": "/portfolio/static/css/main.f3214523.css.map",
+    "main.e6e851da.js.map": "/portfolio/static/js/main.e6e851da.js.map",
+    "787.1ed0c42c.chunk.js.map": "/portfolio/static/js/787.1ed0c42c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f3214523.css",
+    "static/js/main.e6e851da.js"
+  ]
+}
