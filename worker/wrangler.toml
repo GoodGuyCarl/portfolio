@@ -1,0 +1,22 @@
+name = "portfolio-contact"
+main = "src/worker.ts"
+compatibility_date = "2026-08-01"
+
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "1101551887074bf5900cc448b7a707b6"
+
+[vars]
+# Comma-separated origins allowed to call this worker.
+# NOTE: Origin headers carry scheme+host ONLY — never a path.
+ALLOWED_ORIGINS = "http://localhost:5173,https://goodguycarl.github.io"
+EMAILJS_SERVICE_ID = "service_3zdgyjr"
+EMAILJS_TEMPLATE_ID = "template_w75k3xe"
+EMAILJS_PUBLIC_KEY = "tt9QBYtjRghyy31En"
+MAX_PER_HOUR = "3"
+MAX_PER_DAY = "10"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+#   DISCORD_WEBHOOK_URL   - your private Discord webhook
+#   TURNSTILE_SECRET      - Turnstile secret key
+#   EMAILJS_PRIVATE_KEY   - EmailJS private API key (server-side sending)

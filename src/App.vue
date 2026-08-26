@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useReveal } from '@/composables/useReveal'
 import SiteNav from '@/components/SiteNav.vue'
 import HeroSection from '@/components/HeroSection.vue'
 import TechMarquee from '@/components/TechMarquee.vue'
@@ -14,8 +13,6 @@ import SiteFooter from '@/components/SiteFooter.vue'
 import ProjectModal from '@/components/ProjectModal.vue'
 import ToastContainer from '@/components/ToastContainer.vue'
 import BackToTop from '@/components/BackToTop.vue'
-
-useReveal()
 
 const activeProjectKey = ref<string | null>(null)
 

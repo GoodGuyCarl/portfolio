@@ -10,13 +10,13 @@ const emit = defineEmits<{
 <template>
 	<section id="projects" aria-labelledby="h-projects" class="section section--band">
 		<div class="container-x">
-			<header class="shead reveal">
-				<p class="shead__label">Selected Work</p>
+			<header class="shead">
+				<p class="shead__label">Index</p>
 				<div class="shead__body">
-					<h2 id="h-projects" class="shead__title">Projects with proof.</h2>
+					<h2 id="h-projects" class="shead__title">Selected work.</h2>
 					<p class="shead__lead">
-						A few favorites — each with real users, real metrics, and code I'm proud of.
-						Select any project for the full case study.
+						Real projects, live links, honest numbers. Select any project for the full
+						story.
 					</p>
 				</div>
 			</header>
@@ -25,16 +25,26 @@ const emit = defineEmits<{
 				<article
 					v-for="(project, i) in projects"
 					:key="project.key"
-					class="card reveal group relative flex flex-col overflow-hidden"
-					:style="{ '--d': i % 2 === 1 ? '0.08s' : '0s' }"
+					class="card group relative flex flex-col overflow-hidden transition-colors duration-300 hover:border-ink/30"
 				>
 					<!-- Image plate -->
 					<div class="relative aspect-16/10 overflow-hidden border-b border-line">
 						<img
+							v-if="project.img"
 							:src="project.img"
 							:alt="`${project.title} interface preview`"
-							class="h-full w-full object-cover transition duration-700 motion-safe:group-hover:scale-[1.03]"
+							class="h-full w-full object-cover"
 						/>
+						<div
+							v-else
+							class="grid h-full w-full place-items-center bg-ink transition-colors duration-300 group-hover:bg-accent-deep"
+						>
+							<span
+								class="font-display text-6xl font-bold tracking-tight text-paper/85"
+								aria-hidden="true"
+								>{{ project.title.slice(0, 2) }}</span
+							>
+						</div>
 						<span
 							class="folio absolute left-3 top-3 bg-paper/90 px-2 py-1"
 							aria-hidden="true"
@@ -78,6 +88,7 @@ const emit = defineEmits<{
 						<!-- Action buttons (above stretched link) -->
 						<div class="above-stretch mt-auto flex items-center gap-2 pt-5">
 							<a
+								v-if="project.repo"
 								:href="project.repo"
 								target="_blank"
 								rel="noopener"

@@ -59,9 +59,9 @@ function handleResume() {
 				<span
 					aria-hidden="true"
 					class="grid h-9 w-9 place-items-center rounded-md bg-ink font-display text-sm font-bold text-paper"
-					>JR</span
+					>CS</span
 				>
-				<span>Reyes<span class="text-accent">.</span>dev</span>
+				<span>Carl Sanguyo</span>
 			</a>
 
 			<!-- Desktop links -->

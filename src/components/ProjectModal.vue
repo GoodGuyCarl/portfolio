@@ -118,10 +118,18 @@ onUnmounted(() => {
 						<!-- Header image -->
 						<div class="relative border-b border-line">
 							<img
+								v-if="project.img"
 								:src="project.img"
 								:alt="`${project.title} interface preview`"
 								class="h-48 w-full object-cover sm:h-56 md:h-64"
 							/>
+							<div v-else class="grid h-48 w-full place-items-center bg-ink sm:h-56 md:h-64">
+								<span
+									class="font-display text-6xl font-bold tracking-tight text-paper/85"
+									aria-hidden="true"
+									>{{ project.title.slice(0, 2) }}</span
+								>
+							</div>
 							<button
 								ref="closeBtn"
 								type="button"
@@ -202,15 +210,16 @@ onUnmounted(() => {
 									<PhGlobe :size="16" aria-hidden="true" /> Live demo
 									<span class="sr-only"> (opens in new tab)</span>
 								</a>
-								<a
-									:href="project.repo"
-									target="_blank"
-									rel="noopener"
-									class="btn btn-outline"
-								>
-									<PhGithubLogo :size="16" aria-hidden="true" /> Source code
-									<span class="sr-only"> (opens in new tab)</span>
-								</a>
+							<a
+								v-if="project.repo"
+								:href="project.repo"
+								target="_blank"
+								rel="noopener"
+								class="btn btn-outline"
+							>
+								<PhGithubLogo :size="16" aria-hidden="true" /> Source code
+								<span class="sr-only"> (opens in new tab)</span>
+							</a>
 								<button
 									type="button"
 									class="cursor-pointer btn btn-ghost"
