@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useToast } from '@/composables/useToast'
 import {
 	PhArrowDownRight,
 	PhEnvelopeSimple,
@@ -9,13 +8,7 @@ import {
 	PhLinkedinLogo,
 	PhArrowUpRight,
 } from '@phosphor-icons/vue'
-
-const { showToast } = useToast()
-
-function handleResume() {
-	showToast('Tip: choose "Save as PDF" in the print dialog')
-	setTimeout(() => window.print(), 650)
-}
+import { asset } from '@/lib/utils'
 </script>
 
 <template>
@@ -57,10 +50,16 @@ function handleResume() {
 							<PhArrowDownRight :size="16" aria-hidden="true" />
 						</a>
 						<a href="#contact" class="btn btn-outline"> Get in touch </a>
-						<button type="button" class="btn btn-ghost" @click="handleResume">
+						<a
+							:href="asset('SANGUYO_CARLANGELO-Resume.pdf')"
+							target="_blank"
+							rel="noopener"
+							class="btn btn-ghost"
+						>
 							<PhFileText :size="16" aria-hidden="true" />
-							<span class="link-u">Résumé (PDF)</span>
-						</button>
+							<span class="link-u">Résumé</span>
+							<span class="sr-only">(opens in new tab)</span>
+						</a>
 					</div>
 
 					<!-- Spec strip -->
@@ -94,8 +93,11 @@ function handleResume() {
 
 				<!-- Right: identity plate -->
 				<div class="md:col-span-5">
-					<figure class="enter plate" style="--d: 0.16s">
-						<img src="/hero-image.jpg" alt="Portrait of Carl Sanguyo" width="800" height="1000"
+					<figure class="enter plate hidden md:block" style="--d: 0.16s">
+						<img
+							:src="asset('hero-image.jpg')"
+							alt="Portrait of Carl Sanguyo"
+							width="800" height="1000"
 							class="aspect-4/5 w-full rounded-md object-cover" loading="eager" fetchpriority="high"
 							decoding="async" />
 
