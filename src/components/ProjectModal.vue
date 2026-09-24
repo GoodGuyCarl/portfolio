@@ -127,7 +127,7 @@ onUnmounted(() => {
 								<span
 									class="font-display text-6xl font-bold tracking-tight text-paper/85"
 									aria-hidden="true"
-									>{{ project.title.slice(0, 2) }}</span
+									>{{ project.title?.slice(0, 2) }}</span
 								>
 							</div>
 							<button
@@ -167,7 +167,7 @@ onUnmounted(() => {
 										{{ project.role }}
 									</p>
 								</div>
-								<div>
+								<div v-if="project.highlights">
 									<h4
 										class="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-ink-faint"
 									>

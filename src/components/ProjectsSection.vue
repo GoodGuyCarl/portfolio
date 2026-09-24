@@ -79,8 +79,8 @@ const emit = defineEmits<{
 							{{ project.tagline }}
 						</p>
 
-						<ul class="mt-4 flex flex-wrap gap-2" aria-label="Tech stack">
-							<li v-for="tech in project.stack.slice(0, 4)" :key="tech" class="tag">
+						<ul v-if="project.stack" class="mt-4 flex flex-wrap gap-2" aria-label="Tech stack">
+							<li v-for="tech in project.stack?.slice(0, 4)" :key="tech" class="tag">
 								{{ tech }}
 							</li>
 						</ul>

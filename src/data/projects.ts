@@ -2,15 +2,15 @@ import { asset } from '@/lib/utils'
 
 export interface Project {
 	key: string
-	badge: string
+	badge?: string
 	title: string
 	tagline: string
 	img?: string
 	desc: string
-	role: string
-	highlights: string[]
-	stack: string[]
-	live: string
+	role?: string
+	highlights?: string[]
+	stack?: string[]
+	live?: string
 	repo?: string
 }
 
@@ -31,4 +31,19 @@ export const projects: Project[] = [
 		stack: ['Vue', 'Vercel'],
 		live: 'https://cinephile.tech',
 	},
+	{
+		key: 'verdant',
+		badge: 'Shopify Theme',
+		title: 'Verdant',
+		tagline: 'A Shopify theme for a premium quality storefront.',
+		img: asset('verdant.png'),
+		desc: 'Verdant is a Shopify theme made in a span of 3 days learning from scratch on how to quickly develop a Shopify theme. From learning Liquid basics to deploying it in my dev store (I also had to learn to create a dev store). This was a take-home task for a job application that I did not pass.',
+		role: 'Solo developer',
+		highlights: [
+
+		],
+		stack: ['Liquid', 'Shopify'],
+		live: 'https://verdant-il4rhgv0.myshopify.com/',
+		repo: 'https://github.com/GoodGuyCarl/verdant'
+	}
 ]
