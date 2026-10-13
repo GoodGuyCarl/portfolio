@@ -1,48 +1,84 @@
 # portfolio
 
-This template should help get you started developing with Vue 3 in Vite.
+Personal portfolio site for Carl Sanguyo. Single page, built with Vue 3 + Vite, deployed to
+GitHub Pages. The contact form posts to a Cloudflare Worker.
 
-## Recommended IDE Setup
+## Stack
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Vue 3, Vite, Tailwind CSS v4, TypeScript, oxlint + ESLint. No other runtime dependencies.
 
-## Recommended Browser Setup
+## Getting started
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+Requires Node `^22.18.0 || >=24.12.0` (the test runner strips TypeScript types natively, which
+needs those versions) and pnpm.
 
 ```sh
 pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Environment variables
+
+Both are public values, not secrets. Without them the contact form is dead: Vite compiles
+`if (!API_URL)` to an always-true branch and deletes the whole submit and captcha code from the
+bundle. For local work put them in `.env.local` (ignored by git — plain `.env` is **not**):
 
 ```sh
-pnpm build
+VITE_CONTACT_API_URL=https://portfolio-contact.<subdomain>.workers.dev
+VITE_TURNSTILE_SITE_KEY=0x4AAAA...
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+- `VITE_CONTACT_API_URL` — the contact worker's public URL.
+- `VITE_TURNSTILE_SITE_KEY` — Cloudflare dashboard → Turnstile → your widget → Client keys.
+  Must be the widget whose secret key the worker holds in `TURNSTILE_SECRET`.
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | dev server on :5173 |
+| `pnpm build` | type-check + production build into `dist/` |
+| `pnpm test` | worker tests (no network, no dependencies) |
+| `pnpm lint` | oxlint + eslint, both with `--fix` |
+| `pnpm format` | prettier over `src/` |
+
+## Deploying the site
+
+Push to `main`. `.github/workflows/deploy.yml` builds and publishes to GitHub Pages at
+`/<repo-name>`, which is why `vite.config.ts` sets `base: '/portfolio'`.
+
+The workflow reads `VITE_CONTACT_API_URL` and `VITE_TURNSTILE_SITE_KEY` from **repository
+variables** (Settings → Secrets and variables → Actions → Variables) and fails the build if
+either is missing. Repository secrets also work if you would rather not expose them.
+
+The site is served from a subpath, so public files must go through `asset()` in
+`src/lib/utils.ts` rather than a plain `/logo.png` path.
+
+## The contact worker
+
+`worker/` is a standalone Cloudflare Worker, deployed by hand. It checks a Turnstile captcha,
+counts requests per IP in Workers KV, forwards the message to a Discord webhook, and sends the
+visitor an auto-reply through EmailJS.
 
 ```sh
-pnpm lint
+cd worker
+npx wrangler deploy
+npx wrangler secret put DISCORD_WEBHOOK_URL
+npx wrangler secret put TURNSTILE_SECRET
+npx wrangler secret put EMAILJS_PRIVATE_KEY
+```
+
+Plain config (origins, rate limits, EmailJS ids) lives in `worker/wrangler.toml`. The origin
+list must contain the scheme and host only, never a path.
+
+It is type-checked by the root `pnpm type-check` and covered by `pnpm test`.
+
+## Layout
+
+```
+src/components/     one component per section
+src/composables/    useScrollSpy, useScrolledPast, useToast
+src/data/           project content
+src/lib/utils.ts    asset() for public files under the Pages base path
+worker/src/         the contact API and its tests
 ```
