@@ -12,7 +12,12 @@ export interface Project {
 	stack?: string[]
 	live?: string
 	repo?: string
+	/** Kept here so the stats strip cannot quote a different number. */
+	monthlyVisitors?: number
 }
+
+/** Stated once: the stats strip and the case study both quote this. */
+const cinephileVisitors = 140
 
 export const projects: Project[] = [
 	{
@@ -24,12 +29,13 @@ export const projects: Project[] = [
 		desc: 'Cinephile is my hobby project: a movie and series streaming site built with Vue and deployed on Vercel. It started as a way to practice component architecture and API integration end-to-end and it now welcomes real visitors every month.',
 		role: 'Solo developer & maintainer',
 		highlights: [
-			'140+ monthly visitors over the last 30 days (Vercel)',
+			`${cinephileVisitors}+ monthly visitors over the last 30 days (Vercel)`,
 			'Designed, built and deployed entirely solo',
 			'Hands-on practice across Vue, APIs and deployment',
 		],
 		stack: ['Vue', 'Vercel'],
 		live: 'https://cinephile.tech',
+		monthlyVisitors: cinephileVisitors,
 	},
 	{
 		key: 'verdant',

@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { projects } from '@/data/projects'
+
+// The visitor count lives with the project it describes, so the two can never disagree.
+const traffic = projects.find((p) => p.monthlyVisitors !== undefined)!
+
 const readings = [
 	{
 		label: 'Experience',
@@ -7,8 +12,8 @@ const readings = [
 	},
 	{
 		label: 'Live traffic',
-		value: '130+/mo',
-		note: 'Cinephile, last 30 days via Vercel',
+		value: `${traffic.monthlyVisitors}+/mo`,
+		note: `${traffic.title}, last 30 days via Vercel`,
 	},
 	{
 		label: 'Technologies',

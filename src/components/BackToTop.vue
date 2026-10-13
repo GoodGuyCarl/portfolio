@@ -1,26 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { useScrolledPast } from '@/composables/useScrolledPast'
 import { PhCaretUp } from '@phosphor-icons/vue'
 
-const show = ref(false)
-
-function onScroll() {
-	show.value = window.scrollY > 600
-}
+const show = useScrolledPast(600)
 
 function scrollToTop() {
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 	window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
 }
-
-onMounted(() => {
-	window.addEventListener('scroll', onScroll, { passive: true })
-	onScroll()
-})
-
-onUnmounted(() => {
-	window.removeEventListener('scroll', onScroll)
-})
 </script>
 
 <template>

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 import { useScrollSpy } from '@/composables/useScrollSpy'
+import { useScrolledPast } from '@/composables/useScrolledPast'
 import { asset } from '@/lib/utils'
 import { PhList, PhX, PhDownloadSimple, PhArrowRight } from '@phosphor-icons/vue'
 
 const activeId = useScrollSpy(['experience', 'projects', 'skills', 'education', 'contact'])
-const isScrolled = ref(false)
+const isScrolled = useScrolledPast(10)
 const menuOpen = ref(false)
 
 const RESUME_URL = asset('SANGUYO_CARLANGELO-Resume.pdf')
@@ -17,19 +18,6 @@ const navLinks = [
 	{ href: '#education', label: 'Education' },
 	{ href: '#contact', label: 'Contact' },
 ]
-
-function onScroll() {
-	isScrolled.value = window.scrollY > 10
-}
-
-onMounted(() => {
-	window.addEventListener('scroll', onScroll, { passive: true })
-	onScroll()
-})
-
-onUnmounted(() => {
-	window.removeEventListener('scroll', onScroll)
-})
 
 function toggleMenu() {
 	menuOpen.value = !menuOpen.value
