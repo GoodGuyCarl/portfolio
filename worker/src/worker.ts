@@ -118,6 +118,8 @@ async function sendToDiscord(
 	const ua = clamp(request.headers.get('User-Agent') ?? 'Unknown', 200)
 	const lang = request.headers.get('Accept-Language')?.split(',')[0]?.trim() || 'Unknown'
 	const utcTime = new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC'
+	// Discord caps a field at 1024 chars. Say the message was cut, never lose the rest quietly.
+	const shownMessage = message.length > 1000 ? `${clamp(message, 1000)}… (truncated)` : message
 
 	try {
 		const res = await fetch(env.DISCORD_WEBHOOK_URL, {
@@ -132,7 +134,7 @@ async function sendToDiscord(
 						fields: [
 							{ name: 'Name', value: clamp(name, 100), inline: true },
 							{ name: 'Email', value: clamp(email, 200), inline: true },
-							{ name: 'Message', value: clamp(message, 1000) },
+							{ name: 'Message', value: shownMessage },
 							{
 								name: 'Context',
 								value: `${location} • ${lang}\n${utcTime}\n\`${ua}\``,

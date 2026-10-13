@@ -15,7 +15,7 @@ const GOOD_BODY = {
 	turnstileToken: 'fake-captcha-token',
 }
 
-const outbound: string[] = []
+const outbound: { url: string; body: string }[] = []
 let turnstilePasses = true
 
 globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
@@ -23,8 +23,7 @@ globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) =>
 	if (url.includes('siteverify')) {
 		return Response.json({ success: turnstilePasses })
 	}
-	outbound.push(url)
-	void init
+	outbound.push({ url, body: String(init?.body ?? '') })
 	return new Response('', { status: 200 })
 }) as typeof fetch
 
@@ -102,8 +101,23 @@ test('accepts a good message and delivers it', async () => {
 	const res = await post(env, GOOD_BODY)
 	assert.equal(res.status, 200)
 	assert.equal(outbound.length, 2)
-	assert.ok(outbound[0]!.includes('discord.com'))
-	assert.ok(outbound[1]!.includes('emailjs.com'))
+	assert.ok(outbound[0]!.url.includes('discord.com'))
+	assert.ok(outbound[1]!.url.includes('emailjs.com'))
+})
+
+test('says so when a long message is cut for Discord', async () => {
+	const { env } = makeEnv()
+	const long = 'x'.repeat(1500)
+	await post(env, { ...GOOD_BODY, message: long })
+
+	const sent = JSON.parse(outbound[0]!.body) as {
+		embeds: { fields: { name: string; value: string }[] }[]
+	}
+	const field = sent.embeds[0]!.fields.find((f) => f.name === 'Message')!
+	assert.ok(field.value.startsWith('x'.repeat(1000)))
+	assert.ok(field.value.endsWith('… (truncated)'))
+	// Discord rejects a field over 1024 chars, which would lose the message entirely.
+	assert.ok(field.value.length <= 1024, `field was ${field.value.length} chars`)
 })
 
 test('returns 429 once the hourly cap is passed', async () => {
