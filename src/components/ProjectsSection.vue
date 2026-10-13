@@ -34,6 +34,8 @@ const emit = defineEmits<{
 							:src="project.img"
 							:alt="`${project.title} interface preview`"
 							class="h-full w-full object-cover"
+							loading="lazy"
+							decoding="async"
 						/>
 						<div
 							v-else

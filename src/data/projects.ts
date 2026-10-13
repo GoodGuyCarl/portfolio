@@ -44,7 +44,7 @@ export const projects: Project[] = [
 		badge: 'Shopify Theme',
 		title: 'Verdant',
 		tagline: 'A Shopify theme for a premium quality storefront.',
-		img: asset('verdant.png'),
+		img: asset('verdant.jpg'),
 		desc: 'Verdant is a Shopify theme made in a span of 3 days learning from scratch on how to quickly develop a Shopify theme. From learning Liquid basics to deploying it in my dev store (I also had to learn to create a dev store). This was a take-home task for a job application that I did not pass.',
 		role: 'Solo developer',
 		stack: ['Liquid', 'Shopify'],
