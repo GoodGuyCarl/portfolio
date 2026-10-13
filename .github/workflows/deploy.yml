@@ -40,6 +40,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Test
+        run: pnpm test
+
       # The contact form is dead without these two; they are public values, not secrets.
       # Set them in GitHub -> Settings -> Secrets and variables -> Actions -> Variables.
       - name: Build
