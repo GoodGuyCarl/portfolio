@@ -8,6 +8,8 @@ export function useScrollSpy(sectionIds: string[], offset = '-35% 0px -60% 0px')
 
 		const observer = new IntersectionObserver(
 			(entries) => {
+				// Nothing may be active (above the first section), so clear before re-picking.
+				activeId.value = ''
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						activeId.value = entry.target.id
