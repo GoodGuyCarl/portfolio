@@ -14,6 +14,8 @@ export interface Project {
 	repo?: string
 	/** Kept here so the stats strip cannot quote a different number. */
 	monthlyVisitors?: number
+	/** Set when the live demo sits behind a store password. */
+	livePassword?: string
 }
 
 /** Stated once: the stats strip and the case study both quote this. */
@@ -45,11 +47,9 @@ export const projects: Project[] = [
 		img: asset('verdant.png'),
 		desc: 'Verdant is a Shopify theme made in a span of 3 days learning from scratch on how to quickly develop a Shopify theme. From learning Liquid basics to deploying it in my dev store (I also had to learn to create a dev store). This was a take-home task for a job application that I did not pass.',
 		role: 'Solo developer',
-		highlights: [
-
-		],
 		stack: ['Liquid', 'Shopify'],
 		live: 'https://verdant-il4rhgv0.myshopify.com/',
-		repo: 'https://github.com/GoodGuyCarl/verdant'
-	}
+		repo: 'https://github.com/GoodGuyCarl/verdant',
+		livePassword: '123123',
+	},
 ]

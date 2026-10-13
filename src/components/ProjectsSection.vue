@@ -85,6 +85,11 @@ const emit = defineEmits<{
 							</li>
 						</ul>
 
+						<p v-if="project.livePassword"
+							class="mt-4 font-mono text-[11px] font-semibold text-ink-faint">
+							Demo password: <span class="text-ink">{{ project.livePassword }}</span>
+						</p>
+
 						<!-- Action buttons (above stretched link) -->
 						<div class="above-stretch mt-auto flex items-center gap-2 pt-5">
 							<a

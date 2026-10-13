@@ -231,6 +231,12 @@ onUnmounted(() => {
 									Close
 								</button>
 							</div>
+
+							<p v-if="project.livePassword"
+								class="mt-4 font-mono text-xs font-semibold text-ink-faint">
+								Demo store is password protected. Password:
+								<span class="text-ink">{{ project.livePassword }}</span>
+							</p>
 						</div>
 					</template>
 				</div>
