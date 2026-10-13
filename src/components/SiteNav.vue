@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useScrollSpy } from '@/composables/useScrollSpy'
 import { useScrolledPast } from '@/composables/useScrolledPast'
 import { asset } from '@/lib/utils'
@@ -26,6 +26,13 @@ function toggleMenu() {
 function closeMenu() {
 	menuOpen.value = false
 }
+
+function onKeydown(e: KeyboardEvent) {
+	if (e.key === 'Escape') closeMenu()
+}
+
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 </script>
 
 <template>
