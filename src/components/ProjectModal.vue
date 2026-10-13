@@ -16,10 +16,13 @@ const isVisible = ref(false)
 const project = ref<Project | null>(null)
 const closeBtn = ref<HTMLButtonElement | null>(null)
 let lastFocused: HTMLElement | null = null
+let closeTimer: ReturnType<typeof setTimeout> | undefined
 
 watch(
 	() => props.projectKey,
 	async (key) => {
+		// Cancel a pending fade-out, or it closes the modal we are opening right now.
+		clearTimeout(closeTimer)
 		if (key) {
 			project.value = projects.find((p) => p.key === key) || null
 			if (!project.value) return
@@ -35,7 +38,7 @@ watch(
 			})
 		} else {
 			isVisible.value = false
-			setTimeout(() => {
+			closeTimer = setTimeout(() => {
 				isOpen.value = false
 				document.body.style.overflow = ''
 				if (lastFocused?.focus) lastFocused.focus()
