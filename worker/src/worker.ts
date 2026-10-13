@@ -63,32 +63,34 @@ function allowedOrigin(request: Request, env: ContactEnv): string | null {
 	return origin && origins.includes(origin) ? origin : null
 }
 
-async function rateLimit(env: ContactEnv, ip: string): Promise<boolean> {
+function limitKeys(ip: string): { hour: string; day: string } {
 	const now = Math.floor(Date.now() / 1000)
-	const hourKey = `rl:h:${Math.floor(now / 3600)}:${ip}`
-	const dayKey = `rl:d:${Math.floor(now / 86400)}:${ip}`
+	return { hour: `rl:h:${Math.floor(now / 3600)}:${ip}`, day: `rl:d:${Math.floor(now / 86400)}:${ip}` }
+}
 
+async function overLimit(env: ContactEnv, ip: string): Promise<boolean> {
+	const { hour, day } = limitKeys(ip)
 	const [hourCount, dayCount] = await Promise.all([
-		env.RATE_KV.get(hourKey),
-		env.RATE_KV.get(dayKey),
+		env.RATE_KV.get(hour),
+		env.RATE_KV.get(day),
 	])
+	return (
+		Number(hourCount ?? 0) >= Number(env.MAX_PER_HOUR || 10) ||
+		Number(dayCount ?? 0) >= Number(env.MAX_PER_DAY || 30)
+	)
+}
 
-	if (
-		Number(hourCount ?? 0) >= Number(env.MAX_PER_HOUR || 3) ||
-		Number(dayCount ?? 0) >= Number(env.MAX_PER_DAY || 10)
-	) {
-		return false
-	}
-
+/** Called only after the captcha passes, so a failed check never costs the visitor a slot. */
+async function recordHit(env: ContactEnv, ip: string): Promise<void> {
+	const { hour, day } = limitKeys(ip)
+	const [hourCount, dayCount] = await Promise.all([
+		env.RATE_KV.get(hour),
+		env.RATE_KV.get(day),
+	])
 	await Promise.all([
-		env.RATE_KV.put(hourKey, String(Number(hourCount ?? 0) + 1), {
-			expirationTtl: 3700,
-		}),
-		env.RATE_KV.put(dayKey, String(Number(dayCount ?? 0) + 1), {
-			expirationTtl: 86500,
-		}),
+		env.RATE_KV.put(hour, String(Number(hourCount ?? 0) + 1), { expirationTtl: 3700 }),
+		env.RATE_KV.put(day, String(Number(dayCount ?? 0) + 1), { expirationTtl: 86500 }),
 	])
-	return true
 }
 
 async function verifyTurnstile(token: string, ip: string, secret: string): Promise<boolean> {
@@ -211,13 +213,15 @@ export default {
 		}
 
 		const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown'
-		if (!(await rateLimit(env, ip))) {
+		if (await overLimit(env, ip)) {
 			return json({ error: 'rate_limited' }, 429, origin)
 		}
 
 		if (!(await verifyTurnstile(token, ip, env.TURNSTILE_SECRET))) {
 			return json({ error: 'captcha_failed' }, 403, origin)
 		}
+
+		await recordHit(env, ip)
 
 		const delivered = await sendToDiscord(env, request, name, email, message)
 		if (!delivered) {

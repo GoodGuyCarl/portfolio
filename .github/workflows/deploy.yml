@@ -40,8 +40,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # The contact form is dead without these two; they are public values, not secrets.
+      # Set them in GitHub -> Settings -> Secrets and variables -> Actions -> Variables.
       - name: Build
-        run: pnpm build
+        env:
+          VITE_CONTACT_API_URL: ${{ vars.VITE_CONTACT_API_URL }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
+        run: |
+          [ -n "$VITE_CONTACT_API_URL" ] && [ -n "$VITE_TURNSTILE_SITE_KEY" ] \
+            || { echo "::error::Set VITE_CONTACT_API_URL and VITE_TURNSTILE_SITE_KEY as repository variables"; exit 1; }
+          pnpm build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

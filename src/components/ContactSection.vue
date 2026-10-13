@@ -155,7 +155,8 @@ async function copyEmail() {
 		document.body.appendChild(ta)
 		ta.select()
 		try {
-			document.execCommand('copy')
+			// execCommand returns false on failure, it does not throw.
+			if (!document.execCommand('copy')) throw new Error('copy blocked')
 			showToast('Email copied to clipboard')
 		} catch {
 			showToast('Copy not supported, email is sanguyocarl@gmail.com', false)

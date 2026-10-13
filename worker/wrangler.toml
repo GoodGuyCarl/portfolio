@@ -13,8 +13,8 @@ ALLOWED_ORIGINS = "http://localhost:5173,https://goodguycarl.github.io"
 EMAILJS_SERVICE_ID = "service_3zdgyjr"
 EMAILJS_TEMPLATE_ID = "template_w75k3xe"
 EMAILJS_PUBLIC_KEY = "tt9QBYtjRghyy31En"
-MAX_PER_HOUR = "3"
-MAX_PER_DAY = "10"
+MAX_PER_HOUR = "10"
+MAX_PER_DAY = "30"
 
 # Secrets (set via `wrangler secret put <NAME>`):
 #   DISCORD_WEBHOOK_URL   - your private Discord webhook
